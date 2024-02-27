@@ -22,6 +22,7 @@ func InitMiddleware(ctx *gin.Context) {
 	if err != nil {
 		// 如果没有cookie说明没有登录，那就先去登录。
 		fmt.Println(err)
+		// 重定向到登录界面
 		ctx.Redirect(http.StatusFound, "/user/login")
 	}
 	fmt.Println("我是一个中间件")
@@ -179,4 +180,6 @@ func (con AuthController) DoLogin(ctx *gin.Context) {
 	// 登录成功
 	//设置cookie，localhost是域名或者ip。
 	ctx.SetCookie("userId", strconv.Itoa(user.Id), 3600, "/", "localhost", false, false)
+	// 重定向到首页
+	ctx.Redirect(http.StatusFound, "/")
 }
