@@ -27,3 +27,14 @@ func JudgeAdmin(ctx *gin.Context) {
 func (con AdminController) Admin(ctx *gin.Context) {
 	ctx.HTML(http.StatusOK, "admin.html", gin.H{})
 }
+
+func (con AdminController) AddKey(ctx *gin.Context) {
+	key := ctx.PostForm("addKey")
+	license := models.License{
+		SecretKey: key,
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"secret_key": key,
+	})
+	models.DB.Create(&license)
+}

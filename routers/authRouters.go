@@ -19,5 +19,6 @@ func AuthRoutersInit(r *gin.Engine) {
 		Routers.POST("/doLogin", controllers.AuthController{}.DoLogin)
 
 		Routers.GET("/admin", controllers.IsLogin, controllers.JudgeAdmin, controllers.AdminController{}.Admin)
+		Routers.POST("/doAddKey", controllers.AdminController{}.AddKey)
 	}
 }
