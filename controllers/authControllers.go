@@ -16,13 +16,19 @@ type AuthController struct {
 
 // 用于判断权限
 func InitMiddleware(ctx *gin.Context) {
+	//获取cookie
+	_, err := ctx.Cookie("userId")
+	// 判断有没有登录，有没有cookie
+	if err != nil {
+		// 如果没有cookie说明没有登录，那就先去登录。
+		fmt.Println(err)
+		ctx.Redirect(http.StatusFound, "/user/login")
+	}
 	fmt.Println("我是一个中间件")
 }
 
 // 上传页面
 func (con AuthController) Upload(ctx *gin.Context) {
-	//获取cookie
-	// username, _ := ctx.Cookie("username")
 	ctx.HTML(http.StatusOK, "upload.html", gin.H{})
 }
 
@@ -55,8 +61,7 @@ func (con AuthController) DoAdd(ctx *gin.Context) {
 	file.Filename += extName
 
 	//写入数据库
-	var num int
-	num, _ = strconv.Atoi(userId)
+	num, _ := strconv.Atoi(userId)
 	DBAdd(date, file.Filename, num)
 	//创建图片保存目录
 	dir := "./img/" + date
