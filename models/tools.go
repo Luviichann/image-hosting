@@ -20,7 +20,7 @@ func TimeFile() (string, string) {
 }
 
 func Judge(extName string) bool {
-	allowExtMap := map[string]bool{".jpg": true, ".png": true, ".gif": true, ".jpeg": true}
+	allowExtMap := map[string]bool{".jpg": true, ".png": true, ".gif": true, ".jpeg": true, ".webp": true}
 	if _, ok := allowExtMap[extName]; !ok {
 		return false
 	}
