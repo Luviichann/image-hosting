@@ -14,10 +14,10 @@ import (
 type AuthController struct {
 }
 
-// 用于判断权限
-func InitMiddleware(ctx *gin.Context) {
+// 用于判断登录
+func IsLogin(ctx *gin.Context) {
 	//获取cookie
-	_, err := ctx.Cookie("userId")
+	userId, err := ctx.Cookie("userId")
 	// 判断有没有登录，有没有cookie
 	if err != nil {
 		// 如果没有cookie说明没有登录，那就先去登录。
@@ -25,7 +25,8 @@ func InitMiddleware(ctx *gin.Context) {
 		// 重定向到登录界面
 		ctx.Redirect(http.StatusFound, "/user/login")
 	}
-	fmt.Println("我是一个中间件")
+	num, _ := strconv.Atoi(userId)
+	ctx.Set("userId", num)
 }
 
 // 上传页面
@@ -70,7 +71,7 @@ func (con AuthController) DoAdd(ctx *gin.Context) {
 		fmt.Printf("err: %v\n", err)
 	}
 	dst := path.Join(dir, file.Filename)
-	fmt.Println(dst)
+	// fmt.Println(dst)
 	ctx.SaveUploadedFile(file, dst)
 	ctx.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("'%s' uploaded!", file.Filename)})
 }
@@ -131,13 +132,13 @@ func (con AuthController) DoAddUser(ctx *gin.Context) {
 	// 注册
 	if err := ctx.ShouldBind(&user); err == nil {
 		user.Auth = 1
-		fmt.Printf("user: %v\n", user)
-		ctx.JSON(http.StatusOK, gin.H{
-			"id":       user.Id,
-			"username": user.Username, //""里的是返回值，:后的是变量
-			"password": user.Password,
-			"auth":     user.Auth,
-		})
+		// fmt.Printf("user: %v\n", user)
+		// ctx.JSON(http.StatusOK, gin.H{
+		// 	"id":       user.Id,
+		// 	"username": user.Username, //""里的是返回值，:后的是变量
+		// 	"password": user.Password,
+		// 	"auth":     user.Auth,
+		// })
 	} else {
 		ctx.JSON(http.StatusOK, gin.H{
 			"err": err.Error(),
@@ -149,6 +150,7 @@ func (con AuthController) DoAddUser(ctx *gin.Context) {
 	} else {
 		fmt.Println("数据添加成功！")
 	}
+	ctx.Redirect(http.StatusFound, "/user/login")
 }
 
 // 登录页面
@@ -164,7 +166,7 @@ func (con AuthController) DoLogin(ctx *gin.Context) {
 	// 判断用户名是否真的存在
 	user := models.User{}
 	models.DB.Where("username=?", username).Find(&user)
-	fmt.Println(user)
+	// fmt.Println(user)
 	if user.Id == 0 {
 		// 用户名不存在
 		fmt.Println("用户名不存在")

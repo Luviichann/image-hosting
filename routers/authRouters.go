@@ -9,7 +9,7 @@ import (
 func AuthRoutersInit(r *gin.Engine) {
 	Routers := r.Group("/user")
 	{
-		Routers.GET("/upload", controllers.InitMiddleware, controllers.AuthController{}.Upload)
+		Routers.GET("/upload", controllers.IsLogin, controllers.AuthController{}.Upload)
 		Routers.POST("/doAddImage", controllers.AuthController{}.DoAdd)
 
 		Routers.GET("/register", controllers.AuthController{}.Register)
@@ -17,5 +17,7 @@ func AuthRoutersInit(r *gin.Engine) {
 
 		Routers.GET("/login", controllers.AuthController{}.Login)
 		Routers.POST("/doLogin", controllers.AuthController{}.DoLogin)
+
+		Routers.GET("/admin", controllers.IsLogin, controllers.JudgeAdmin, controllers.AdminController{}.Admin)
 	}
 }
