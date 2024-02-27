@@ -11,6 +11,7 @@ func main() {
 	r.LoadHTMLGlob("templates/*")
 	r.Static("/img", "./img")
 	routers.RoutersInit(r)
+	routers.AuthRoutersInit(r)
 	r.Run()
 }
 
