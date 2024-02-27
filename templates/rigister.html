@@ -1,0 +1,27 @@
+{{ define "register.html" }}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>注册</title>
+</head>
+<body>
+    <!-- 注意这里的action的值doAddUser要与下文一样 -->
+    <form action="doAddUser" method="post">
+        <!-- 下面两个输入框的name指定的将要把数据传给后台哪个变量 -->
+        用户名：<input type="text" name="username">
+        <br>
+        <br>
+        密码：<input type="password" name="password">
+        <br>
+        <br>
+        注册码：<input type="text" name="key">
+        <br>
+        <br>
+        <input type="submit" value="提交">
+    </form>
+</body>
+</html>
+
+{{end}}
